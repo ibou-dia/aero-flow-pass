@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { QrCode, Home, FileText, Check, LogOut } from 'lucide-react';
+import { QrCode, Home, FileText, Check, LogOut, HelpCircle, User } from 'lucide-react';
 
 const navItems = [
   {
@@ -24,6 +23,19 @@ const navItems = [
     label: 'Statut',
     href: '/dashboard/status',
     icon: Check,
+  },
+];
+
+const bottomNavItems = [
+  {
+    label: 'Mon Profil',
+    href: '/dashboard/profile',
+    icon: User,
+  },
+  {
+    label: 'Aide & Support',
+    href: '/dashboard/help',
+    icon: HelpCircle,
   },
 ];
 
@@ -78,6 +90,29 @@ const DashboardSidebar = ({ isMobileOpen, setIsMobileOpen }: DashboardSidebarPro
                 </li>
               ))}
             </ul>
+            
+            <div className="mt-8 pt-4 border-t">
+              <p className="px-4 text-xs font-medium text-muted-foreground mb-2">COMPTE</p>
+              <ul className="space-y-1">
+                {bottomNavItems.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      to={item.href}
+                      className={cn(
+                        "flex items-center gap-3 px-4 py-3 rounded-md transition-colors",
+                        location.pathname === item.href
+                          ? "bg-sky-100 text-aero-primary font-medium"
+                          : "hover:bg-sky-50"
+                      )}
+                      onClick={() => setIsMobileOpen(false)}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </nav>
           
           <div className="p-4 border-t">

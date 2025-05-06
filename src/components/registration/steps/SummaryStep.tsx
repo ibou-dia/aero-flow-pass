@@ -1,15 +1,58 @@
-
 import React from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { Shield, Check } from 'lucide-react';
+import { Shield, Check, Plane, Camera } from 'lucide-react';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale/fr';
 
 interface SummaryStepProps {
   formData: any;
 }
 
 const SummaryStep = ({ formData }: SummaryStepProps) => {
+  // Fonction pour obtenir le nom lisible de la compagnie aérienne
+  const getAirlineName = (code: string) => {
+    const airlines: Record<string, string> = {
+      'AIR_FRANCE': 'Air France',
+      'KLM': 'KLM',
+      'LUFTHANSA': 'Lufthansa',
+      'BRITISH_AIRWAYS': 'British Airways',
+      'EMIRATES': 'Emirates',
+      'QATAR_AIRWAYS': 'Qatar Airways',
+      'EASYJET': 'EasyJet',
+      'RYANAIR': 'Ryanair',
+      'OTHER': 'Autre'
+    };
+    return airlines[code] || code;
+  };
+
+  // Fonction pour obtenir le nom lisible de l'aéroport
+  const getAirportName = (code: string) => {
+    const airports: Record<string, string> = {
+      'CDG': 'Paris Charles de Gaulle (CDG)',
+      'ORY': 'Paris Orly (ORY)',
+      'LYS': 'Lyon Saint-Exupéry (LYS)',
+      'NCE': 'Nice Côte d\'Azur (NCE)',
+      'MRS': 'Marseille Provence (MRS)',
+      'TLS': 'Toulouse-Blagnac (TLS)',
+      'BOD': 'Bordeaux-Mérignac (BOD)',
+      'NTE': 'Nantes Atlantique (NTE)',
+      'JFK': 'New York JFK (JFK)',
+      'LHR': 'Londres Heathrow (LHR)',
+      'DXB': 'Dubaï (DXB)',
+      'SIN': 'Singapour Changi (SIN)',
+      'HND': 'Tokyo Haneda (HND)',
+      'LAX': 'Los Angeles (LAX)',
+      'FRA': 'Francfort (FRA)',
+      'AMS': 'Amsterdam Schiphol (AMS)',
+      'MAD': 'Madrid Barajas (MAD)',
+      'BCN': 'Barcelone El Prat (BCN)',
+      'FCO': 'Rome Fiumicino (FCO)'
+    };
+    return airports[code] || code;
+  };
+
   return (
     <div className="space-y-6 form-step active">
       <div className="text-center mb-6">
@@ -56,7 +99,52 @@ const SummaryStep = ({ formData }: SummaryStepProps) => {
 
         <Card>
           <CardContent className="p-6">
-            <h4 className="font-medium mb-4">Documents</h4>
+            <div className="flex items-center gap-2 mb-4">
+              <Plane className="h-5 w-5 text-aero-primary" />
+              <h4 className="font-medium">Informations de vol</h4>
+            </div>
+            <dl className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4">
+              <div>
+                <dt className="text-sm text-muted-foreground">Compagnie aérienne</dt>
+                <dd className="font-medium">
+                  {formData.airline ? getAirlineName(formData.airline) : 'Non spécifié'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-muted-foreground">Numéro de vol</dt>
+                <dd className="font-medium">{formData.flightNumber || 'Non spécifié'}</dd>
+              </div>
+              <div>
+                <dt className="text-sm text-muted-foreground">Date de départ</dt>
+                <dd className="font-medium">
+                  {formData.departureDate 
+                    ? format(new Date(formData.departureDate), "PPP", { locale: fr }) 
+                    : 'Non spécifiée'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-muted-foreground">Motif du voyage</dt>
+                <dd className="font-medium">{formData.travelPurpose || 'Non spécifié'}</dd>
+              </div>
+              <div>
+                <dt className="text-sm text-muted-foreground">Aéroport de départ</dt>
+                <dd className="font-medium">
+                  {formData.departureAirport ? getAirportName(formData.departureAirport) : 'Non spécifié'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-muted-foreground">Aéroport de destination</dt>
+                <dd className="font-medium">
+                  {formData.destinationAirport ? getAirportName(formData.destinationAirport) : 'Non spécifié'}
+                </dd>
+              </div>
+            </dl>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <h4 className="font-medium mb-4">Documents et biométrie</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2">
                 <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center">
@@ -70,13 +158,15 @@ const SummaryStep = ({ formData }: SummaryStepProps) => {
                   <Check className="h-4 w-4 text-green-500" />
                 </div>
                 <span className="font-medium">Billet d'avion</span>
-                <span className="text-sm text-muted-foreground ml-auto">PNR: AB1234</span>
+                <span className="text-sm text-muted-foreground ml-auto">
+                  {formData.flightNumber ? `Vol: ${formData.flightNumber}` : 'PNR: AB1234'}
+                </span>
               </li>
               <li className="flex items-center gap-2">
-                <div className="h-6 w-6 rounded-full bg-sky-100 flex items-center justify-center opacity-50">
-                  <Check className="h-4 w-4 text-aero-primary" />
+                <div className="h-6 w-6 rounded-full bg-sky-100 flex items-center justify-center">
+                  <Camera className="h-4 w-4 text-aero-primary" />
                 </div>
-                <span className="font-medium text-muted-foreground">Vérification biométrique</span>
+                <span className="font-medium">Vérification biométrique</span>
                 <span className="text-sm text-muted-foreground ml-auto">Activée</span>
               </li>
             </ul>
@@ -90,8 +180,8 @@ const SummaryStep = ({ formData }: SummaryStepProps) => {
           <div>
             <h4 className="font-medium mb-1">Protection de vos données</h4>
             <p className="text-sm text-muted-foreground">
-              Vos informations personnelles et documents sont chiffrés et stockés en toute sécurité.
-              Ils ne sont utilisés que pour faciliter votre passage à l'aéroport.
+              Vos informations personnelles, de vol et données biométriques sont chiffrées et stockées en toute sécurité.
+              Elles ne sont utilisées que pour faciliter votre passage à l'aéroport.
             </p>
           </div>
         </div>

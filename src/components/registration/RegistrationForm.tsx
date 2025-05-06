@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,21 +12,33 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import PersonalInfoStep from './steps/PersonalInfoStep';
 import DocumentsUploadStep from './steps/DocumentsUploadStep';
+import FlightInfoStep from './steps/FlightInfoStep';
 import BiometricStep from './steps/BiometricStep';
 import SummaryStep from './steps/SummaryStep';
 
-// La forme simplifiée du schéma
+// Schéma de formulaire avec tous les champs optionnels pour pouvoir naviguer librement
 const formSchema = z.object({
-  firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
-  lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
-  birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Format de date incorrect"),
-  nationality: z.string().min(2, "Veuillez sélectionner votre nationalité"),
-  email: z.string().email("Format d'email incorrect"),
-  phone: z.string().min(10, "Numéro de téléphone incorrect"),
-  passportNumber: z.string().min(5, "Numéro de passeport incorrect"),
-  acceptTerms: z.boolean().refine(val => val === true, {
-    message: "Vous devez accepter les conditions d'utilisation",
-  }),
+  // Informations personnelles
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  birthDate: z.string().optional(),
+  nationality: z.string().optional(),
+  email: z.string().optional(),
+  phone: z.string().optional(),
+  
+  // Documents de voyage
+  passportNumber: z.string().optional(),
+  
+  // Informations de vol
+  flightNumber: z.string().optional(),
+  airline: z.string().optional(),
+  departureDate: z.string().optional(),
+  departureAirport: z.string().optional(),
+  destinationAirport: z.string().optional(),
+  travelPurpose: z.string().optional(),
+  
+  // Termes et conditions
+  acceptTerms: z.boolean().optional(),
 });
 
 type RegistrationFormValues = z.infer<typeof formSchema>;
@@ -35,7 +46,8 @@ type RegistrationFormValues = z.infer<typeof formSchema>;
 const steps = [
   { id: 'personal', title: 'Informations personnelles' },
   { id: 'documents', title: 'Documents de voyage' },
-  { id: 'biometric', title: 'Vérification biométrique' },
+  { id: 'flight', title: 'Informations de vol' },
+  { id: 'biometric', title: 'Biométrie' },
   { id: 'summary', title: 'Récapitulatif' },
 ];
 
@@ -54,13 +66,25 @@ const RegistrationForm = () => {
       email: '',
       phone: '',
       passportNumber: '',
+      flightNumber: '',
+      airline: '',
+      departureDate: '',
+      departureAirport: '',
+      destinationAirport: '',
+      travelPurpose: '',
       acceptTerms: false,
     },
+    // Désactiver la validation lors de la soumission
+    mode: 'onSubmit',
   });
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
+      // Enregistrer les données du formulaire sans validation
+      form.trigger().catch(() => {
+        // Ignorer les erreurs de validation
+      });
     }
   };
 
@@ -80,9 +104,22 @@ const RegistrationForm = () => {
           title: "Pré-enregistrement soumis",
           description: "Votre pré-enregistrement a été envoyé avec succès.",
         });
-        // Redirection vers la page de QR code ou de statut
+        // Redirection vers la page de QR code
+        window.location.href = "/dashboard/qrcode";
       }, 2000);
     } else {
+      // Passer directement à l'étape suivante sans validation
+      nextStep();
+    }
+  };
+
+  // Modification pour permettre de contourner la validation du formulaire
+  const handleNextClick = () => {
+    if (currentStep === steps.length - 1) {
+      // Si on est à la dernière étape, on soumet le formulaire normalement
+      form.handleSubmit(onSubmit)();
+    } else {
+      // Sinon, on passe directement à l'étape suivante sans validation
       nextStep();
     }
   };
@@ -94,8 +131,10 @@ const RegistrationForm = () => {
       case 1:
         return <DocumentsUploadStep />;
       case 2:
-        return <BiometricStep />;
+        return <FlightInfoStep form={form} />;
       case 3:
+        return <BiometricStep />;
+      case 4:
         return <SummaryStep formData={form.getValues()} />;
       default:
         return null;
@@ -141,7 +180,7 @@ const RegistrationForm = () => {
       <Card className="bg-white">
         <CardContent className="pt-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={(e) => { e.preventDefault(); handleNextClick(); }} className="space-y-6">
               <div className="min-h-[400px]">
                 {renderStepContent()}
               </div>
@@ -156,7 +195,8 @@ const RegistrationForm = () => {
                   Précédent
                 </Button>
                 <Button
-                  type="submit"
+                  type="button"
+                  onClick={handleNextClick}
                   className="bg-aero-primary hover:bg-aero-dark"
                   disabled={isSubmitting}
                 >

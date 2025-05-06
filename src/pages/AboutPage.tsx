@@ -664,51 +664,6 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Benefits Section */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-16">Les avantages d'AeroFlow</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Card className="bg-sky-50 border-none">
-                <CardContent className="pt-6">
-                  <div className="w-12 h-12 rounded-full bg-aero-primary text-white flex items-center justify-center mb-4">
-                    <Clock className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">Gain de temps</h3>
-                  <p className="text-muted-foreground">
-                    Réduisez votre temps d'attente aux contrôles de sécurité et d'immigration jusqu'à 70%.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-sky-50 border-none">
-                <CardContent className="pt-6">
-                  <div className="w-12 h-12 rounded-full bg-aero-primary text-white flex items-center justify-center mb-4">
-                    <Shield className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">Sécurité renforcée</h3>
-                  <p className="text-muted-foreground">
-                    Vos données sont chiffrées et sécurisées selon les normes les plus strictes du marché.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-sky-50 border-none">
-                <CardContent className="pt-6">
-                  <div className="w-12 h-12 rounded-full bg-aero-primary text-white flex items-center justify-center mb-4">
-                    <User className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">Expérience simplifiée</h3>
-                  <p className="text-muted-foreground">
-                    Un parcours passager fluide et sans stress grâce à notre technologie de pointe.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-aero-primary to-aero-secondary text-white overflow-hidden">
           <div className="container mx-auto px-4 text-center relative z-10">
@@ -718,12 +673,12 @@ const AboutPage = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/register">
-                <Button size="lg" className="bg-white text-aero-primary hover:bg-gray-100">
+                <Button variant="outline" size="lg" className="border-white text-aero-primary hover:bg-white/10">
                   S'inscrire gratuitement
                 </Button>
               </Link>
               <Link to="/login">
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+                <Button variant="outline" size="lg" className="border-white text-aero-primary hover:bg-white/10">
                   Se connecter
                 </Button>
               </Link>

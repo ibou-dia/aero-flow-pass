@@ -11,7 +11,7 @@ const steps = [
   {
     number: '02',
     title: 'Téléversement de documents',
-    description: 'Téléchargez votre passeport, visa et billet d'avion pour vérification.'
+    description: "Téléchargez votre passeport, visa et billet d'avion pour vérification."
   },
   {
     number: '03',
@@ -21,7 +21,7 @@ const steps = [
   {
     number: '04',
     title: 'Validation et obtention du QR code',
-    description: 'Une fois vos documents validés, recevez votre QR code unique à présenter à l'aéroport.'
+    description: "Une fois vos documents validés, recevez votre QR code unique à présenter à l'aéroport."
   }
 ];
 

@@ -7,17 +7,17 @@ const features = [
   {
     icon: Clock,
     title: 'Économisez du temps',
-    description: 'Réduisez votre temps d'attente aux contrôles de sécurité grâce à la vérification anticipée de vos documents.'
+    description: "Réduisez votre temps d'attente aux contrôles de sécurité grâce à la vérification anticipée de vos documents."
   },
   {
     icon: Shield,
     title: 'Sécurité renforcée',
-    description: 'Authentification biométrique et QR code sécurisé pour garantir votre identité tout au long de votre parcours.'
+    description: "Authentification biométrique et QR code sécurisé pour garantir votre identité tout au long de votre parcours."
   },
   {
     icon: Check,
     title: 'Simplicité maximale',
-    description: 'Une interface intuitive et un processus en quelques étapes pour préparer votre voyage en toute sérénité.'
+    description: "Une interface intuitive et un processus en quelques étapes pour préparer votre voyage en toute sérénité."
   }
 ];
 
